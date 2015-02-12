@@ -7,10 +7,10 @@ class ConnectController {
     }
 
     def success() {
-
+        []
     }
 
     def failure() {
-
+        []
     }
 }

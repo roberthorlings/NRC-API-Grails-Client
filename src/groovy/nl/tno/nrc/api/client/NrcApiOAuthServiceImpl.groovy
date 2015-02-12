@@ -56,11 +56,13 @@ class NrcApiOAuthServiceImpl extends OAuth20ServiceImpl {
 				request.addBodyParameter( paramName, paramValue )
 		}
 
-        println parameters
+        println "Request: ${api.getAccessTokenVerb()} ${api.getAccessTokenEndpoint()}"
+
+        println "Parameters: ${parameters}"
 
 		Response response = request.send();
 
-        println response.getBody()
+        println "Response: ${response.getBody()}"
 
 		return api.getAccessTokenExtractor().extract(response.getBody());
 	}
