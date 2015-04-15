@@ -12,6 +12,8 @@
 </head>
 
 <body>
-    Success! =)
+    Success! =)<br>
+
+    Now <b><g:link controller="connect" action="test">test</g:link></b> the connection.
 </body>
 </html>

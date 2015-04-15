@@ -129,11 +129,10 @@ oauth {
             successUri = "${grails.serverURL}/connect/success"
             failureUri = "${grails.serverURL}/connect/failure"
 
-            key = "test"
-            secret = "testsecret"
+            key = "<key>"
+            secret = "<secret>"
 
-            // Human API requires the signaturetype header
-            signatureType = org.scribe.model.SignatureType.Header
+//            signatureType = org.scribe.model.SignatureType.Header
 
             // The callback is explicitly mentioned here, so it is sent along with
             // the Oauth calls.
