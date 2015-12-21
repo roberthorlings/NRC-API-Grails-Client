@@ -28,17 +28,14 @@ class ConnectController {
             return
         }
 
-        def url = 'http://localhost:8080/nrc/api/openmhealth/testCall'
+        def url = 'http://localhost:8080/nrc/api/openmhealth/v1/dataPoints/4'
 
-        def nrcResponse = oauthService.getNrcResource( token, url )
-
-        def jsonResponse = JSON.parse( nrcResponse.body )
-
+        def nrcResponse = oauthService.putNrcResource( token, url, null, [ "Accept": "application/json" ] )
 
         // set output headers
-        response.status = 200
+        response.status = nrcResponse.code
         response.contentType = 'application/json;charset=UTF-8'
 
-        render jsonResponse
+        render nrcResponse.body
     }
 }
