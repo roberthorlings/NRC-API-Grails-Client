@@ -134,6 +134,8 @@ oauth {
 
 //            signatureType = org.scribe.model.SignatureType.Header
 
+            scope = "read_data_points"
+
             // The callback is explicitly mentioned here, so it is sent along with
             // the Oauth calls.
             callback = "${grails.serverURL}/oauth/nrc/callback"
