@@ -14,6 +14,13 @@
 <body>
     Success! =)<br>
 
-    Now <b><g:link controller="connect" action="test">test</g:link></b> the connection.
+    Now test the connection:
+
+    <ul>
+        <li><g:link controller="connect" action="list" params="[schema_namespace: 'omh']">list</g:link> (you have to specify schema_namespace, schema_name and schema_version)</li>
+        <li><g:link controller="connect" action="create">create</g:link> (parameters: source, value and unit)</li>
+        <li><g:link controller="connect" action="show">show</g:link> (parameters: id)</li>
+        <li><g:link controller="connect" action="delete">delete</g:link> (parameters: id)</li>
+    </ul>
 </body>
 </html>
