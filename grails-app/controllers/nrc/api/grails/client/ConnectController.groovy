@@ -56,6 +56,8 @@ class ConnectController {
         def value = params.float( 'value' ) ?: new java.util.Random().nextDouble() * 20 + 60
         def unit = params.unit ?: "kg"
 
+        def schemaName = params.schema ?: 'body-weight'
+        def bodyPropertyName = schemaName.replace( '-', '_' )
         def data = [
                 header: [
                         id: java.util.UUID.randomUUID().toString(),
@@ -67,12 +69,12 @@ class ConnectController {
                         ],
                         schema_id: [
                                 namespace: 'omh',
-                                name: 'body-weight',
+                                name: schemaName,
                                 version: '1.0'
                         ]
                 ],
                 body: [
-                        body_weight: [ unit: unit, value: value ]
+                        (bodyPropertyName): [ unit: unit, value: value ]
                 ]
         ]
 
