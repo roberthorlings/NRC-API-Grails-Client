@@ -50,35 +50,49 @@ class ConnectController {
         }
 
         def url = 'http://localhost:8080/nrc/api/openmhealth/v1/dataPoints'
+        def json
 
-        def date = new Date().format( dateFormat, TimeZone.getTimeZone( "Europe/Amsterdam" ) )
-        def source = params.source ?: "Manual"
-        def value = params.float( 'value' ) ?: new java.util.Random().nextDouble() * 20 + 60
-        def unit = params.unit ?: "kg"
+        if( params.data ) {
+            json = params.data
+        } else {
+            def date = new Date().format(dateFormat, TimeZone.getTimeZone("Europe/Amsterdam"))
+            def source = params.source ?: "Manual"
+            def value = params.float('value') ?: new java.util.Random().nextDouble() * 20 + 60
+            def unit = params.unit ?: "kg"
 
-        def schemaName = params.schema ?: 'body-weight'
-        def bodyPropertyName = schemaName.replace( '-', '_' )
-        def data = [
-                header: [
-                        id: java.util.UUID.randomUUID().toString(),
-                        creation_date_time: date,
-                        acquisition_provenance: [
-                            source_name: source,
-                            source_creation_date_time:date,
-                            modality:"sensed"
-                        ],
-                        schema_id: [
-                                namespace: 'omh',
-                                name: schemaName,
-                                version: '1.0'
-                        ]
-                ],
-                body: [
-                        (bodyPropertyName): [ unit: unit, value: value ]
-                ]
-        ]
+            def schemaName = params.schema ?: 'body-weight'
+            def data = [
+                    header: [
+                            id                    : java.util.UUID.randomUUID().toString(),
+                            creation_date_time    : date,
+                            acquisition_provenance: [
+                                    source_name              : source,
+                                    source_creation_date_time: date,
+                                    modality                 : "sensed"
+                            ],
+                            schema_id             : [
+                                    namespace: 'omh',
+                                    name     : schemaName,
+                                    version  : '1.0'
+                            ]
+                    ],
+                    body  : [:]
+            ]
 
-        def nrcResponse = oauthService.postNrcResourceWithPayload( token, url, new JsonBuilder( data ).toPrettyString(), [ "Accept": "application/json", "Content-type": "application/json" ] )
+            // Add the body
+            if (params.custom_body) {
+                params.custom_body.each { k, v ->
+                    data.body[k] = [unit: unit, value: v.toFloat()]
+                }
+            } else {
+                def bodyPropertyName = schemaName.replace('-', '_')
+                data.body[bodyPropertyName] = [unit: unit, value: value]
+            }
+
+            json = new JsonBuilder( data ).toPrettyString()
+        }
+
+        def nrcResponse = oauthService.postNrcResourceWithPayload( token, url, json, [ "Accept": "application/json", "Content-type": "application/json" ] )
 
         // set output headers
         response.status = nrcResponse.code
